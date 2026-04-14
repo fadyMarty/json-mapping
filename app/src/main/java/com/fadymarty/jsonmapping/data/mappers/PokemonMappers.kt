@@ -1,5 +1,6 @@
 package com.fadymarty.jsonmapping.data.mappers
 
+import com.fadymarty.jsonmapping.common.util.Constants
 import com.fadymarty.jsonmapping.data.data_source.remote.dto.PokemonDto
 import com.fadymarty.jsonmapping.domain.model.Pokemon
 import kotlinx.serialization.json.JsonObject
@@ -18,6 +19,6 @@ fun PokemonDto.toPokemon(): Pokemon {
     return Pokemon(
         name = name.replaceFirstChar { it.titlecase() },
         url = url,
-        imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/$id.gif"
+        imageUrl = Constants.getImageUrlById(id)
     )
 }

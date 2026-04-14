@@ -1,8 +1,8 @@
 package com.fadymarty.jsonmapping.presentation.pokemon_list
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fadymarty.jsonmapping.domain.model.Category
 import com.fadymarty.jsonmapping.domain.repository.PokemonRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,9 +24,18 @@ class PokemonListViewModel(
             pokemonRepository.getPokemons()
                 .onSuccess { pokemons ->
                     _state.update {
-                        it.copy(pokemons = pokemons)
+                        it.copy(
+                            categories = pokemons
+                                .groupBy { pokemon -> pokemon.name.first() }
+                                .toSortedMap()
+                                .map { entry ->
+                                    Category(
+                                        name = entry.key.toString(),
+                                        pokemons = entry.value
+                                    )
+                                }
+                        )
                     }
-                    Log.d("PokemonListViewModel", pokemons.toString())
                 }
             _state.update {
                 it.copy(isLoading = false)
